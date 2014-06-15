@@ -41,7 +41,7 @@ module.exports = (robot) ->
     event = req.headers['x-github-event'].toLowerCase()
     console.log(event)
 
-    require('fs').writeFileSync('/tmp/hubot/' + event + '.log', JSON.stringify(data))
+    require('fs').writeFileSync('/tmp/hubot/' + event + '-' + (+new Date()) + '.log', JSON.stringify(data))
 
     eventMethods = {
       '*': doWildcardEvent,
@@ -104,11 +104,13 @@ module.exports = (robot) ->
   doIssuesEvent = (robot, user, data) ->
     do (data) ->
       issue = data.issue
-      headCommit = data.head_commit
       repository = data.repository
 
       gitio issue.html_url, (err, data) ->
-        robot.send user, "#{issue.user.login}さんから#{repository.name}リポジトリにIssueをもらったよ！どうやって解決しようか？ \nもらったしたIssueはこれね。 #{if err then commit.url else data}"
+        msg = "#{issue.user.login}さんから#{repository.name}リポジトリにIssueをもらったよ！どうやって解決しようか？ \nもらったしたIssueはこれね。 #{if err then commit.url else data}"
+
+        robot.send user, msg
+        doTweet msg
 
 
   #Any time a User is added as a collaborator to a non-Organization Repository.
@@ -133,25 +135,13 @@ module.exports = (robot) ->
       headCommit = data.head_commit
       repository = data.repository
 
-      gitio headCommit.url, (err, data) ->
-        robot.send user, "#{pusher.name}さんが#{repository.name}リポジトリにPushしたよ！忘れずに git fetch してね！ \nPushしたコミットはこれね。 #{if err then commit.url else data}"
+      gitio repository.url, (err, data) ->
+        #msg = "#{pusher.name}さんが#{repository.name}リポジトリにPushしたよ！忘れずに git fetch してね！ \nPushしたコミットはこれね。 #{if err then commit.url else data}"
+        msg = "#{pusher.name}さんが#{repository.name}リポジトリにPushしたよ！忘れずに git fetch してね！ \nPushしたコミットはこれね。 #{if err then repository.url else data}"
 
-#    try
-#      if push.commits.length > 0
-#        commitWord = if push.commits.length > 1 then "commits" else "commit"
-#        robot.send user, "Got #{push.commits.length} new #{commitWord} from #{push.commits[0].author.name} on #{push.repository.name}"
-#        for commit in push.commits
-#          do (commit) ->
-#            gitio commit.url, (err, data) ->
-#              robot.send user, "  * #{commit.message} (#{if err then commit.url else data})"
-#      else
-#        if push.created
-#          robot.send user, "#{push.pusher.name} created: #{push.ref}: #{push.base_ref}"
-#        if push.deleted
-#          robot.send user, "#{push.pusher.name} deleted: #{push.ref}"
-#
-#    catch error
-#      console.log "github-commits error: #{error}. Push: #{push}"
+        robot.send user, msg
+        doTweet msg
+
 
   #Any time a Release is published in the Repository.
   doReleaseEvent = (robot, user, data) ->
@@ -164,4 +154,33 @@ module.exports = (robot) ->
 
   #Any time a User watches the Repository.
   doWatchEvent = (robot, user, data) ->
+
+  doTweet = (msg) ->
+    config = {
+      consumer_key: process.env.HUBOT_TWITTER_CONSUMER_KEY
+      consumer_secret: process.env.HUBOT_TWITTER_CONSUMER_SECRET
+      access_token: process.env.HUBOT_TWITTER_ACCESS_TOKEN
+      access_token_secret: process.env.HUBOT_TWITTER_ACCESS_TOKEN_SECRET
+    }
+
+    unless config.consumer_key
+      console.log "Please set the HUBOT_TWITTER_CONSUMER_KEY environment variable."
+      return
+
+    unless config.consumer_secret
+      console.log "Please set the HUBOT_TWITTER_CONSUMER_SECRET environment variable."
+      return
+
+    unless config.access_token
+      console.log "Please set the HUBOT_TWITTER_ACCESS_TOKEN environment variable."
+      return
+
+    unless config.access_token_secret
+      console.log "Please set the HUBOT_TWITTER_ACCESS_TOKEN_SECRET environment variable."
+      return
+
+    Twit = require('twit')
+    t = new Twit(config)
+    t.post 'statuses/update', { status: msg }, (err, data, response) ->
+      console.log err
 

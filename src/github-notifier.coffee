@@ -70,56 +70,72 @@ module.exports = (robot) ->
 
     return unless eventMethod?
 
-    eventMethod(robot, data)
+    eventMethod(robot, user, data)
 
 
   #Any time any event is triggered (Wildcard Event).
-  doWildcardEvent = (robot, data) ->
+  doWildcardEvent = (robot, user, data) ->
 
   #Any time a Commit is commented on.
-  doCommitCommentEvent = (robot, data) ->
+  doCommitCommentEvent = (robot, user, data) ->
 
   #Any time a Branch or Tag is created.
-  doCreateEvent = (robot, data) ->
+  doCreateEvent = (robot, user, data) ->
 
   #Any time a Branch or Tag is deleted.
-  doDeleteEvent = (robot, data) ->
+  doDeleteEvent = (robot, user, data) ->
 
   #Any time a Repository has a new deployment created from the API.
-  doDeploymentEvent = (robot, data) ->
+  doDeploymentEvent = (robot, user, data) ->
 
   #Any time a deployment for the Repository has a status update from the API.
-  doDeploymentStatusEvent = (robot, data) ->
+  doDeploymentStatusEvent = (robot, user, data) ->
 
   #Any time a Repository is forked.
-  doForkEvent = (robot, data) ->
+  doForkEvent = (robot, user, data) ->
 
   #Any time a Wiki page is updated.
-  doGollumEvent = (robot, data) ->
+  doGollumEvent = (robot, user, data) ->
 
   #Any time an Issue is commented on.
-  doIssueCommentEvent = (robot, data) ->
+  doIssueCommentEvent = (robot, user, data) ->
 
   #Any time an Issue is opened or closed.
-  doIssuesEvent = (robot, data) ->
+  doIssuesEvent = (robot, user, data) ->
+    do (data) ->
+      issue = data.issue
+      headCommit = data.head_commit
+      repository = data.repository
+
+      gitio issue.html_url, (err, data) ->
+        robot.send user, "#{issue.user.login}さんから#{repository.name}リポジトリにIssueをもらったよ！どうやって解決しようか？ \nもらったしたIssueはこれね。 #{if err then commit.url else data}"
+
 
   #Any time a User is added as a collaborator to a non-Organization Repository.
-  doMemberEvent = (robot, data) ->
+  doMemberEvent = (robot, user, data) ->
 
   #Any time a Pages site is built or results in a failed build.
-  doPageBuildEvent = (robot, data) ->
+  doPageBuildEvent = (robot, user, data) ->
 
   #Any time a Repository changes from private to public.
-  doPublicEvent = (robot, data) ->
+  doPublicEvent = (robot, user, data) ->
 
   #Any time a Commit is commented on while inside a Pull Request review (the Files Changed tab).
-  doPullRequestReviewCommentEvent = (robot, data) ->
+  doPullRequestReviewCommentEvent = (robot, user, data) ->
 
   #Any time a Pull Request is opened, closed, or synchronized (updated due to a new push in the branch that the pull request is tracking).
-  doPullRequestEvent = (robot, data) ->
+  doPullRequestEvent = (robot, user, data) ->
 
   #Any git push to a Repository. This is the default event.
-  doPushEvent = (robot, push) ->
+  doPushEvent = (robot, user, data) ->
+    do (data) ->
+      pusher = data.pusher
+      headCommit = data.head_commit
+      repository = data.repository
+
+      gitio headCommit.url, (err, data) ->
+        robot.send user, "#{pusher.name}さんが#{repository.name}リポジトリにPushしたよ！忘れずに git fetch してね！ \nPushしたコミットはこれね。 #{if err then commit.url else data}"
+
 #    try
 #      if push.commits.length > 0
 #        commitWord = if push.commits.length > 1 then "commits" else "commit"
@@ -138,14 +154,14 @@ module.exports = (robot) ->
 #      console.log "github-commits error: #{error}. Push: #{push}"
 
   #Any time a Release is published in the Repository.
-  doReleaseEvent = (robot, data) ->
+  doReleaseEvent = (robot, user, data) ->
 
   #Any time a Repository has a status update from the API
-  doStatusEvent = (robot, data) ->
+  doStatusEvent = (robot, user, data) ->
 
   #Any time a team is added or modified on a Repository.
-  doTeamAddEvent = (robot, data) ->
+  doTeamAddEvent = (robot, user, data) ->
 
   #Any time a User watches the Repository.
-  doWatchEvent = (robot, data) ->
+  doWatchEvent = (robot, user, data) ->
 

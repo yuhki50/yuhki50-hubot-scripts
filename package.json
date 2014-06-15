@@ -20,6 +20,8 @@
   },
 
   "dependencies": {
+    "coffee-script": "~1.6",
+    "gitio2": ">=2.0.0"
   },
 
   "devDependencies": {

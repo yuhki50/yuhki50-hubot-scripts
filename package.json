@@ -1,8 +1,8 @@
 {
-  "name": "hubot-example",
-  "description": "An example script pacakage for Hubot",
-  "version": "1.0.0",
-  "author": "Tom Bell <tomb@tomb.io>",
+  "name": "yuhki50-hubot-scripts",
+  "description": "Optional scripts for hubot",
+  "version": "0.0.1",
+  "author": "yuhki50",
   "license": "MIT",
 
   "keywords": [
@@ -12,15 +12,14 @@
 
   "repository": {
     "type": "git",
-    "url": "git://github.com/hubot-scripts/hubot-example.git"
+    "url": "git://github.com/yuhki50/yuhki50-hubot-scripts.git"
   },
 
   "bugs": {
-    "url": "https://github.com/hubot-scripts/hubot-example/issues"
+    "url": "https://github.com/yuhki50/yuhki50/hubot-scripts/issues"
   },
 
   "dependencies": {
-    "coffee-script": "~1.6"
   },
 
   "devDependencies": {

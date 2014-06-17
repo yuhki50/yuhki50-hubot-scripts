@@ -132,12 +132,13 @@ module.exports = (robot) ->
   doPushEvent = (robot, user, data) ->
     do (data) ->
       pusher = data.pusher
-      headCommit = data.head_commit
       repository = data.repository
+      commits = data.commits
+      latestCommit = commits[commits.length - 1]
 
-      gitio repository.url, (err, data) ->
+      gitio latestCommit.url, (err, data) ->
         #msg = "#{pusher.name}さんが#{repository.name}リポジトリにPushしたよ！忘れずに git fetch してね！ \nPushしたコミットはこれね。 #{if err then commit.url else data}"
-        msg = "#{pusher.name}さんが#{repository.name}リポジトリにPushしたよ！忘れずに git fetch してね！ \nPushしたコミットはこれね。 #{if err then repository.url else data}"
+        msg = "#{pusher.name}さんが#{repository.name}リポジトリにPushしたよ！忘れずに git fetch してね！ \nPushしたコミットはこれね。 #{if err then latestCommit.url else data}"
 
         robot.send user, msg
         doTweet msg

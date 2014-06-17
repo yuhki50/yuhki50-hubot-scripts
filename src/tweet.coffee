@@ -28,7 +28,7 @@ module.exports = (robot) ->
     message = msg.match[1]
 
     if message
-      console.log message.replace('\\n', '\n')
+      doTweet message.replace('\\n', '\n')
 
 
   doTweet = (msg) ->

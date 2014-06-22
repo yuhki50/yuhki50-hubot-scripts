@@ -21,8 +21,23 @@
 url = require('url')
 querystring = require('querystring')
 gitio = require('gitio2')
+CronJob = require('cron').CronJob
 
 module.exports = (robot) ->
+
+  new CronJob('0 0 21 * * 0', ->
+    # '0 0 21 * * 0'
+
+    # Seconds: 0-59
+    # Minutes: 0-59
+    # Hours: 0-23
+    # Day of Month: 1-31
+    # Months: 0-11
+    # Day of Week: 0-6
+
+    doTweet('皆さん、進捗どうですか？')
+  ).start()
+
 
   robot.respond /twitter\s+(.*)$/i, (msg) ->
     message = msg.match[1]

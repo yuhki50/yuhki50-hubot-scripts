@@ -72,6 +72,7 @@ module.exports = (robot) ->
 
     Twit = require('twit')
     t = new Twit(config)
+    console.log msg
     t.post 'statuses/update', { status: msg }, (err, data, response) ->
       console.log err
 

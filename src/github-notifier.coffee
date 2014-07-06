@@ -107,7 +107,7 @@ module.exports = (robot) ->
       repository = data.repository
 
       gitio issue.html_url, (err, data) ->
-        msg = "#{issue.user.login}さんから#{repository.name}リポジトリにIssueをもらったよ！どうやって解決しようか？ \nもらったしたIssueはこれね。 #{if err then commit.url else data}"
+        msg = "#{issue.user.login}さんから#{repository.name}リポジトリにIssueをもらったよ！どうやって解決しようか？ \nもらったIssueはこれね。 #{if err then commit.url else data}"
 
         robot.send user, msg
         doTweet msg

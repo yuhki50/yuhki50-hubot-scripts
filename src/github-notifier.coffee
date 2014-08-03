@@ -99,6 +99,15 @@ module.exports = (robot) ->
 
   #Any time an Issue is commented on.
   doIssueCommentEvent = (robot, user, data) ->
+    do (data) ->
+      issue = data.issue
+      repository = data.repository
+
+      gitio issue.html_url, (err, data) ->
+        msg = "#{issue.user.login}さんから#{repository.name}リポジトリにIssueのコメントをもらったよ！\nもらったIssueのコメントはこれね。 #{if err then commit.url else data}"
+
+        robot.send user, msg
+        doTweet msg
 
   #Any time an Issue is opened or closed.
   doIssuesEvent = (robot, user, data) ->

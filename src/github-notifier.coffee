@@ -103,8 +103,10 @@ module.exports = (robot) ->
       issue = data.issue
       repository = data.repository
 
+      console.log data
+
       gitio issue.html_url, (err, data) ->
-        msg = "#{issue.user.login}さんから#{repository.name}リポジトリにIssueのコメントをもらったよ！\nもらったIssueのコメントはこれね。 #{if err then commit.url else data}"
+        msg = "#{issue.sender.login}さんから#{repository.name}リポジトリにIssueのコメントをもらったよ！\nもらったIssueのコメントはこれね。 #{if err then commit.url else data}"
 
         robot.send user, msg
         doTweet msg
@@ -116,7 +118,7 @@ module.exports = (robot) ->
       repository = data.repository
 
       gitio issue.html_url, (err, data) ->
-        msg = "#{issue.user.login}さんから#{repository.name}リポジトリにIssueをもらったよ！どうやって解決しようか？ \nもらったIssueはこれね。 #{if err then commit.url else data}"
+        msg = "#{issue.sender.login}さんから#{repository.name}リポジトリにIssueをもらったよ！どうやって解決しようか？ \nもらったIssueはこれね。 #{if err then commit.url else data}"
 
         robot.send user, msg
         doTweet msg

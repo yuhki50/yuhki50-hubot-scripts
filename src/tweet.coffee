@@ -25,6 +25,7 @@ CronJob = require('cron').CronJob
 
 module.exports = (robot) ->
 
+  ###
   new CronJob('0 0 21 * * 0', ->
     # '0 0 21 * * 0'
 
@@ -35,8 +36,49 @@ module.exports = (robot) ->
     # Months: 0-11
     # Day of Week: 0-6
 
-    doTweet('皆さん、進捗どうですか？')
+    #doTweet('皆さん、進捗どうですか？')
+    doTweet('CITERAの皆さん！進捗はどうですか？\nあと27日で津田沼祭だよ！')
   ).start()
+  ###
+
+
+
+  ###
+  new CronJob('0 0 22 2 * 0', ->
+    doTweet 'CITERAの皆さん！進捗はどうですか？\nあと20日で津田沼祭だよ！'
+  ).start()
+
+  new CronJob('0 0 22 9 * 0', ->
+    doTweet 'CITERAの皆さん！進捗はどうですか？\nあと13日で津田沼祭だよ！'
+  ).start()
+  ###
+
+  ###
+  new CronJob('0 0 21 16 * 0', ->
+    doTweet 'CITERAの皆さん！進捗はどうですか？あと6日で津田沼祭だよ！\n作品はもう出来たかな？見た目も大切だから、ちゃんとケースに入れようね。私のオススメはTAKACHIのプラケースだよ！'
+  ).start()
+
+  new CronJob('0 0 21 17 * 0', ->
+    doTweet 'CITERAの皆さん！進捗はどうですか？\nあと5日で津田沼祭だよ！'
+  ).start()
+
+  new CronJob('0 0 21 18 * 0', ->
+    doTweet 'CITERAの皆さん！進捗はどうですか？\nあと4日で津田沼祭だよ！'
+  ).start()
+  ###
+
+  new CronJob('0 0 21 19 * 0', ->
+    doTweet 'CITERAの皆さん！進捗はどうですか？\nあと3日で津田沼祭だよ！'
+  ).start()
+
+  new CronJob('0 0 21 20 * 0', ->
+    doTweet 'CITERAの皆さん！進捗はどうですか？\nあと2日で津田沼祭だよ！'
+  ).start()
+
+  new CronJob('0 0 21 21 * 0', ->
+    doTweet 'CITERAの皆さん！進捗はどうですか？\n明日は津田沼祭だよ！ちゃんと準備できた？'
+  ).start()
+
 
 
   robot.respond /twitter\s+(.*)$/i, (msg) ->
